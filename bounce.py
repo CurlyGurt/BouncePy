@@ -52,8 +52,8 @@ def verletUpdate(clock): #main physics calculations
         elif sticks[i].particleB in inactiveParticles:
             sticks[i].particleA.x += offset[0]
             sticks[i].particleA.y += offset[1]
-        else:
-            sticks[i].particleA.x += offset[0]
+        else:                                       #if all of a sticks particles are active
+            sticks[i].particleA.x += offset[0]      #then apply the offset to all of them
             sticks[i].particleA.y += offset[1]
             sticks[i].particleB.x -= offset[0]
             sticks[i].particleB.y -= offset[1]
@@ -85,15 +85,35 @@ def checkMouse(posX, posY):
                     particles.append(inactiveParticles[i])      #if mouse3 pressed, reactive particle
                     inactiveParticles.remove(inactiveParticles[i])
 
-                
+def buildMode(posX, posY):
+    if pygame.mouse.get_pressed(num_buttons=3)[0]:
+        particles.append(Particle(posX, posY, 1))
+        print("Created Particle!")
+        pygame.time.delay(100)
+    for i in range(len(particles)):
+        if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:               #checks if a particle is within
+            if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:           #the mouse radius, and activates
+                if pygame.mouse.get_pressed(num_buttons=3)[2]:
+                    selectedParticles.append(particles[i])
+                    particles.remove(particles[i])
+                    if len(selectedParticles) > 1:
+                        sticks.append(Stick(selectedParticles[0], selectedParticles[1], findDistance(selectedParticles[0], selectedParticles[1])))
+                        particles.append(selectedParticles[0])
+                        particles.append(selectedParticles[1])
+                        selectedParticles.clear()
+                        print("Created Stick!")
+                    break
+
 #particle creation
 particles = []
+
 particles.append(Particle(10,50,1))     #0          #1------#2  
 particles.append(Particle(40,30,1))     #1          /        \
 particles.append(Particle(70,30,1))     #2        #0----------#3
 particles.append(Particle(100,50,1))    #3
 
 inactiveParticles = []
+selectedParticles = []
 
 #stick creation
 sticks = []
@@ -111,7 +131,11 @@ HEIGHT = 600
 MOUSE_GRAB_RADIUS = 10
 WHITE = (255,255,255)
 RED = (255,0,0)
+BLUE = (0,0,255)
 RADIUS = 5
+run = True
+buildModeRun = False
+
 
 def main():
     #setup
@@ -119,6 +143,8 @@ def main():
     window = pygame.display.set_mode((WIDTH,HEIGHT))
     clock = pygame.time.Clock()
     run = True
+    buildModeRun = False
+    
 
     while run: #main pygame loop
         pygame.event.get() #needed so windows doesn't think game is frozen
@@ -133,11 +159,26 @@ def main():
         for i in range(len(sticks)): #draws sticks
             pygame.draw.line(window, RED, (sticks[i].particleA.x, sticks[i].particleA.y), (sticks[i].particleB.x, sticks[i].particleB.y), 2)
 
+        for i in range(len(selectedParticles)): #draws active particles
+            pygame.draw.circle(window, BLUE, (selectedParticles[i].x, selectedParticles[i].y), RADIUS) 
+
+
         pygame.display.update()
         window.fill((0,0,0)) #fill background black
-        verletUpdate(clock) #pass clock to verlet physics
+        if buildModeRun:
+            buildMode(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+            if pygame.key.get_pressed()[pygame.K_b]:
+                buildModeRun = False
+                pygame.time.delay(100)
+        else:
+            verletUpdate(clock) #pass clock to verlet physics
+            if pygame.key.get_pressed()[pygame.K_b]:
+                buildModeRun = True
+                pygame.time.delay(100)
+
         checkMouse(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) #send mouse position to be checked
         if pygame.key.get_pressed()[pygame.K_ESCAPE]: #if user hits ESCAPE, close the game
             run = False
+        
 
 main()
