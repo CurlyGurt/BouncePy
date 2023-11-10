@@ -80,6 +80,13 @@ def checkMouse(posX, posY):
                     #print("Particle hit!")
                     particles[i].x = posX
                     particles[i].y = posY
+    for i in range(len(inactiveParticles)):
+        if inactiveParticles[i].x >= posX-MOUSE_GRAB_RADIUS and inactiveParticles[i].x <= posX+MOUSE_GRAB_RADIUS:
+            if inactiveParticles[i].y >= posY-MOUSE_GRAB_RADIUS and inactiveParticles[i].y <= posY+MOUSE_GRAB_RADIUS:
+                if pygame.mouse.get_pressed(num_buttons=3)[1]:
+                    particles.append(inactiveParticles[i])
+                    inactiveParticles.remove(inactiveParticles[i])
+
                 
 
 particles = []
