@@ -23,9 +23,9 @@ def borderBounds(particle):
     if particle.y < 0: particle.y = 0
 
 def findDifference(particleA, particleB):
-    return (particleA.x - particleB.x, particleA.y - particleB.y)
+    return (particleA.x - particleB.x, particleA.y - particleB.y) #two point distance formula
 
-def verletUpdate(clock):
+def verletUpdate(clock): #main physics calculations
     deltaTime = pygame.time.Clock.get_time(clock)
     for i in range(len(particles)):
         force = (0.0, 0.0005)
@@ -41,15 +41,13 @@ def verletUpdate(clock):
         borderBounds(particles[i])
 
     for i in range(len(sticks)):
-        #if sticks[i].particleA in inactiveParticles or sticks[i].particleB in inactiveParticles:
-            #break
         particleDiff = findDifference(sticks[i].particleA, sticks[i].particleB)
         #print("particleDiff = ", particleDiff)
         diffFactor = (sticks[i].length - findLength(particleDiff)) / findLength(particleDiff) * .5
         offset = (particleDiff[0] * diffFactor, particleDiff[1] * diffFactor)
 
-        if sticks[i].particleA in inactiveParticles:
-            sticks[i].particleB.x -= offset[0]
+        if sticks[i].particleA in inactiveParticles: #if a particle is inactive
+            sticks[i].particleB.x -= offset[0]       #then we don't adjust its offset
             sticks[i].particleB.y -= offset[1]
         elif sticks[i].particleB in inactiveParticles:
             sticks[i].particleA.x += offset[0]
@@ -60,35 +58,35 @@ def verletUpdate(clock):
             sticks[i].particleB.x -= offset[0]
             sticks[i].particleB.y -= offset[1]
 
-def findLength(particle):
+def findLength(particle): #finds the length of a stick
     return math.sqrt((particle[0]*particle[0]) + (particle[1]*particle[1]))
 
-def findDistance(particleA, particleB):
+def findDistance(particleA, particleB): # finds the distance between two particles
     xDiff = particleA.x - particleB.x
     yDiff = particleA.y - particleB.y
     return math.sqrt((xDiff*xDiff) + (yDiff*yDiff))
 
 def checkMouse(posX, posY):
     for i in range(len(particles)):
-        if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:
-            if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:
-                if pygame.mouse.get_pressed(num_buttons=3)[0] and pygame.mouse.get_pressed(num_buttons=3)[2]:
+        if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:               #checks if a particle is within
+            if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:           #the mouse radius, and activates
+                if pygame.mouse.get_pressed(num_buttons=3)[0] and pygame.mouse.get_pressed(num_buttons=3)[2]:   #buttons if they are
                     inactiveParticles.append(particles[i])
-                    particles.remove(particles[i])
+                    particles.remove(particles[i])  #if mouse1&2 pressed, deactivate particle
                     break
                 elif pygame.mouse.get_pressed(num_buttons=3)[0]:
                     #print("Particle hit!")
-                    particles[i].x = posX
+                    particles[i].x = posX           #if mouse1 pressed, grab particle
                     particles[i].y = posY
     for i in range(len(inactiveParticles)):
-        if inactiveParticles[i].x >= posX-MOUSE_GRAB_RADIUS and inactiveParticles[i].x <= posX+MOUSE_GRAB_RADIUS:
+        if inactiveParticles[i].x >= posX-MOUSE_GRAB_RADIUS and inactiveParticles[i].x <= posX+MOUSE_GRAB_RADIUS:       #checks if inactive particle is whithin mouse radius
             if inactiveParticles[i].y >= posY-MOUSE_GRAB_RADIUS and inactiveParticles[i].y <= posY+MOUSE_GRAB_RADIUS:
                 if pygame.mouse.get_pressed(num_buttons=3)[1]:
-                    particles.append(inactiveParticles[i])
+                    particles.append(inactiveParticles[i])      #if mouse3 pressed, reactive particle
                     inactiveParticles.remove(inactiveParticles[i])
 
                 
-
+#particle creation
 particles = []
 particles.append(Particle(10,50,1))     #0          #1------#2  
 particles.append(Particle(40,30,1))     #1          /        \
@@ -97,6 +95,7 @@ particles.append(Particle(100,50,1))    #3
 
 inactiveParticles = []
 
+#stick creation
 sticks = []
 sticks.append(Stick(particles[0], particles[1], findDistance(particles[0], particles[1])))
 sticks.append(Stick(particles[1], particles[2], findDistance(particles[1], particles[2])))
@@ -106,42 +105,39 @@ sticks.append(Stick(particles[0], particles[2], findDistance(particles[0], parti
 sticks.append(Stick(particles[1], particles[3], findDistance(particles[1], particles[3])))
 #sticks.append(Stick(particles[], particles[], findDistance(particles[], particles[])))
               
-
+#GLOBALS
 WIDTH = 600
 HEIGHT = 600
 MOUSE_GRAB_RADIUS = 10
+WHITE = (255,255,255)
+RED = (255,0,0)
+RADIUS = 5
 
 def main():
     #setup
     pygame.init()
     window = pygame.display.set_mode((WIDTH,HEIGHT))
     clock = pygame.time.Clock()
-
-    #Globals
-    WHITE = (255,255,255)
-    RED = (255,0,0)
-    RADIUS = 5
-  
     run = True
 
-    while run:
-        pygame.event.get()
+    while run: #main pygame loop
+        pygame.event.get() #needed so windows doesn't think game is frozen
         clock.tick(144)
 
-        for i in range(len(particles)):
-            pygame.draw.circle(window, RED, (particles[i].x, particles[i].y), RADIUS)
+        for i in range(len(particles)): #draws active particles
+            pygame.draw.circle(window, RED, (particles[i].x, particles[i].y), RADIUS) 
 
-        for i in range(len(inactiveParticles)):
+        for i in range(len(inactiveParticles)): #draws inactive particles
             pygame.draw.circle(window, WHITE, (inactiveParticles[i].x, inactiveParticles[i].y), RADIUS)
 
-        for i in range(len(sticks)):
+        for i in range(len(sticks)): #draws sticks
             pygame.draw.line(window, RED, (sticks[i].particleA.x, sticks[i].particleA.y), (sticks[i].particleB.x, sticks[i].particleB.y), 2)
 
         pygame.display.update()
-        window.fill((0,0,0))
-        verletUpdate(clock)
-        checkMouse(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+        window.fill((0,0,0)) #fill background black
+        verletUpdate(clock) #pass clock to verlet physics
+        checkMouse(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) #send mouse position to be checked
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]: #if user hits ESCAPE, close the game
             run = False
 
 main()
