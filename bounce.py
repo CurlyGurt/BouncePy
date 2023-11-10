@@ -38,7 +38,7 @@ def findDifference(particleA, particleB):
 def verletUpdate(clock):
     deltaTime = pygame.time.Clock.get_rawtime(clock)
     for i in range(len(particles)):
-        force = (0.0, 0.5)
+        force = (0.0, 0.025)
         acceleration = (force[0] / particles[i].mass, force[1] / particles[i].mass)
         prevPosition = (particles[i].x, particles[i].y)
 
@@ -87,6 +87,8 @@ sticks.append(Stick(particles[0], particles[1], findDistance(particles[0], parti
 sticks.append(Stick(particles[1], particles[2], findDistance(particles[1], particles[2])))
 sticks.append(Stick(particles[2], particles[3], findDistance(particles[2], particles[3])))
 sticks.append(Stick(particles[3], particles[0], findDistance(particles[3], particles[0])))
+sticks.append(Stick(particles[0], particles[2], findDistance(particles[0], particles[2])))
+sticks.append(Stick(particles[1], particles[3], findDistance(particles[1], particles[3])))
 #sticks.append(Stick(particles[], particles[], findDistance(particles[], particles[])))
               
 
@@ -101,12 +103,12 @@ def main():
 
     #Globals
     RED = (255,0,0)
-    RADIUS = 10
+    RADIUS = 5
   
     run = True
 
     while run:
-        clock.tick(24)
+        clock.tick(144)
 
         for i in range(len(particles)):
             pygame.draw.circle(window, RED, (particles[i].x, particles[i].y), RADIUS)
