@@ -16,16 +16,6 @@ class Stick:
         self.particleB = particleB
         self.length = length
 
-def eulerPhysics():
-
-    p1 = Particle()
-
-    force = 10.0
-    acceleration = force / p1.mass
-
-    time = 0.0
-    deltaTime = 0.0
-
 def borderBounds(particle):
     if particle.x >= WIDTH: particle.x = WIDTH
     if particle.y >= HEIGHT: particle.y = HEIGHT
@@ -61,8 +51,6 @@ def verletUpdate(clock):
         sticks[i].particleB.x -= offset[0]
         sticks[i].particleB.y -= offset[1]
 
-
-
 def findLength(particle):
     return math.sqrt((particle[0]*particle[0]) + (particle[1]*particle[1]))
 
@@ -71,16 +59,27 @@ def findDistance(particleA, particleB):
     yDiff = particleA.y - particleB.y
     return math.sqrt((xDiff*xDiff) + (yDiff*yDiff))
 
-
-
-    #print("in verlet: particles[i].x = ", particles[i].x, "\tSupposed new number = ", 2 * particles[i].x - particles[i].prevx + acceleration[0] * (deltaTime * deltaTime))
-
+def checkMouse(posX, posY):
+    for i in range(len(particles)):
+        if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:
+            if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:
+                if pygame.mouse.get_pressed(num_buttons=3)[0] and pygame.mouse.get_pressed(num_buttons=3)[1]:
+                    inactiveParticles.append(particles[i])
+                    particles.remove(particles[i])
+                    break
+                elif pygame.mouse.get_pressed(num_buttons=3)[0]:
+                    #print("Particle hit!")
+                    particles[i].x = posX
+                    particles[i].y = posY
+                
 
 particles = []
 particles.append(Particle(10,50,1))     #0          #1------#2  
-particles.append(Particle(40,30,1))     #1           |       |
-particles.append(Particle(70,30,1))     #2          #0------#3
+particles.append(Particle(40,30,1))     #1          /        \
+particles.append(Particle(70,30,1))     #2        #0----------#3
 particles.append(Particle(100,50,1))    #3
+
+inactiveParticles = []
 
 sticks = []
 sticks.append(Stick(particles[0], particles[1], findDistance(particles[0], particles[1])))
@@ -94,6 +93,7 @@ sticks.append(Stick(particles[1], particles[3], findDistance(particles[1], parti
 
 WIDTH = 600
 HEIGHT = 600
+MOUSE_GRAB_RADIUS = 10
 
 def main():
     #setup
@@ -108,6 +108,7 @@ def main():
     run = True
 
     while run:
+        pygame.event.get()
         clock.tick(144)
 
         for i in range(len(particles)):
@@ -117,8 +118,10 @@ def main():
             pygame.draw.line(window, RED, (sticks[i].particleA.x, sticks[i].particleA.y), (sticks[i].particleB.x, sticks[i].particleB.y), 2)
 
         pygame.display.update()
-
         window.fill((0,0,0))
         verletUpdate(clock)
+        checkMouse(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+            run = False
 
 main()
