@@ -106,7 +106,7 @@ def main():
     run = True
 
     while run:
-        clock.tick(60)
+        clock.tick(24)
 
         for i in range(len(particles)):
             pygame.draw.circle(window, RED, (particles[i].x, particles[i].y), RADIUS)
