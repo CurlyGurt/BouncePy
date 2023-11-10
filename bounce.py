@@ -41,15 +41,24 @@ def verletUpdate(clock):
         borderBounds(particles[i])
 
     for i in range(len(sticks)):
+        #if sticks[i].particleA in inactiveParticles or sticks[i].particleB in inactiveParticles:
+            #break
         particleDiff = findDifference(sticks[i].particleA, sticks[i].particleB)
         #print("particleDiff = ", particleDiff)
         diffFactor = (sticks[i].length - findLength(particleDiff)) / findLength(particleDiff) * .5
         offset = (particleDiff[0] * diffFactor, particleDiff[1] * diffFactor)
 
-        sticks[i].particleA.x += offset[0]
-        sticks[i].particleA.y += offset[1]
-        sticks[i].particleB.x -= offset[0]
-        sticks[i].particleB.y -= offset[1]
+        if sticks[i].particleA in inactiveParticles:
+            sticks[i].particleB.x -= offset[0]
+            sticks[i].particleB.y -= offset[1]
+        elif sticks[i].particleB in inactiveParticles:
+            sticks[i].particleA.x += offset[0]
+            sticks[i].particleA.y += offset[1]
+        else:
+            sticks[i].particleA.x += offset[0]
+            sticks[i].particleA.y += offset[1]
+            sticks[i].particleB.x -= offset[0]
+            sticks[i].particleB.y -= offset[1]
 
 def findLength(particle):
     return math.sqrt((particle[0]*particle[0]) + (particle[1]*particle[1]))
@@ -63,7 +72,7 @@ def checkMouse(posX, posY):
     for i in range(len(particles)):
         if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:
             if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:
-                if pygame.mouse.get_pressed(num_buttons=3)[0] and pygame.mouse.get_pressed(num_buttons=3)[1]:
+                if pygame.mouse.get_pressed(num_buttons=3)[0] and pygame.mouse.get_pressed(num_buttons=3)[2]:
                     inactiveParticles.append(particles[i])
                     particles.remove(particles[i])
                     break
@@ -102,6 +111,7 @@ def main():
     clock = pygame.time.Clock()
 
     #Globals
+    WHITE = (255,255,255)
     RED = (255,0,0)
     RADIUS = 5
   
@@ -113,6 +123,9 @@ def main():
 
         for i in range(len(particles)):
             pygame.draw.circle(window, RED, (particles[i].x, particles[i].y), RADIUS)
+
+        for i in range(len(inactiveParticles)):
+            pygame.draw.circle(window, WHITE, (inactiveParticles[i].x, inactiveParticles[i].y), RADIUS)
 
         for i in range(len(sticks)):
             pygame.draw.line(window, RED, (sticks[i].particleA.x, sticks[i].particleA.y), (sticks[i].particleB.x, sticks[i].particleB.y), 2)
