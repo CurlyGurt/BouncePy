@@ -36,9 +36,9 @@ def findDifference(particleA, particleB):
     return (particleA.x - particleB.x, particleA.y - particleB.y)
 
 def verletUpdate(clock):
-    deltaTime = pygame.time.Clock.get_rawtime(clock)
+    deltaTime = pygame.time.Clock.get_time(clock)
     for i in range(len(particles)):
-        force = (0.0, 0.025)
+        force = (0.0, 0.0005)
         acceleration = (force[0] / particles[i].mass, force[1] / particles[i].mass)
         prevPosition = (particles[i].x, particles[i].y)
 
