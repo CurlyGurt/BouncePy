@@ -28,3 +28,7 @@ Enter Build Mode - B
 Create Particle - Left Click (Mouse 1) While in Build Mode
 
 ![ezgif com-video-to-gif(5)](https://github.com/CurlyGurt/BouncePy/assets/114094237/afce07ca-be32-454c-8d09-fd54eab0c6d8)
+
+Create Stick - Right Click Active Particle, then click another Active Particle to connect it to.
+
+![ezgif com-video-to-gif(6)](https://github.com/CurlyGurt/BouncePy/assets/114094237/c3eebdd6-6ca7-42a7-83b7-60b9c07e6505)
