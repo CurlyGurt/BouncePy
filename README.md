@@ -1,11 +1,11 @@
 # BouncePy
 Verlet Based Physics Sim
 
-Created using this C++ tutorial I found here: https://pikuma.com/blog/verlet-integration-2d-cloth-physics-simulation
+physics interactions created using this C++ tutorial I found here: https://pikuma.com/blog/verlet-integration-2d-cloth-physics-simulation
 
 Very basic, but not bad for essentially porting all of that code to python
 
-Current Features: Interact Mode
+# Current Features: Interact Mode
 
 Grab a particle - Left Click (Mouse 1)
 
@@ -19,7 +19,7 @@ Unfreeze a particle - Middle Click (Mouse 3)
 
 ![ezgif com-video-to-gif(2)](https://github.com/CurlyGurt/BouncePy/assets/114094237/3b66ac8d-23ed-4f24-80e0-c5e1fe273724)
 
-Build Mode:
+# Build Mode:
 
 Enter Build Mode - B
 
