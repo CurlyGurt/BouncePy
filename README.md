@@ -8,6 +8,7 @@ Very basic, but not bad for essentially porting all of that code to python
 Current Features: Interact Mode
 
 Grab a particle - Left Click (Mouse 1)
+
 ![ezgif com-video-to-gif](https://github.com/CurlyGurt/BouncePy/assets/114094237/40eb9e33-8363-4a10-a587-e5c1fcb6706b)
 
 Freeze a particle - Left Click (Hold) & Right Click (Mouse 2)
