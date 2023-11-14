@@ -19,26 +19,12 @@ Unfreeze a particle - Middle Click (Mouse 3)
 
 ![ezgif com-video-to-gif(2)](https://github.com/CurlyGurt/BouncePy/assets/114094237/3b66ac8d-23ed-4f24-80e0-c5e1fe273724)
 
+Build Mode:
 
+Enter Build Mode - B
 
+![ezgif com-video-to-gif(3)](https://github.com/CurlyGurt/BouncePy/assets/114094237/bf3a023a-d03a-44f6-ad54-d8ec170d4576)
 
+Create Particle - Left Click (Mouse 1) While in Build Mode
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Code in Action:
-
-![ezgif com-crop](https://github.com/CurlyGurt/BouncePy/assets/114094237/7eb2a8c0-8a90-4d8f-82be-ed49aa280ee8)
-
+![ezgif com-video-to-gif(5)](https://github.com/CurlyGurt/BouncePy/assets/114094237/afce07ca-be32-454c-8d09-fd54eab0c6d8)
