@@ -89,7 +89,7 @@ def buildMode(posX, posY):
     if pygame.mouse.get_pressed(num_buttons=3)[0]:
         particles.append(Particle(posX, posY, 1))
         print("Created Particle!")
-        pygame.time.delay(100)
+        pygame.time.delay(200)
     for i in range(len(particles)):
         if particles[i].x >= posX-MOUSE_GRAB_RADIUS and particles[i].x <= posX+MOUSE_GRAB_RADIUS:               #checks if a particle is within
             if particles[i].y >= posY-MOUSE_GRAB_RADIUS and particles[i].y <= posY+MOUSE_GRAB_RADIUS:           #the mouse radius, and activates
@@ -104,6 +104,9 @@ def buildMode(posX, posY):
                         selectedParticles.clear()
                         print("Created Stick!")
                     break
+                if pygame.mouse.get_pressed(num_buttons=3)[1]:
+                    particles.remove(particles[i])
+                    print("Deleted particle!")
 
 #particle creation
 particles = []
@@ -165,7 +168,7 @@ def main():
 
         pygame.display.update()
         window.fill((0,0,0)) #fill background black
-        
+
         if buildModeRun:
             buildMode(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
             if pygame.key.get_pressed()[pygame.K_b]:
