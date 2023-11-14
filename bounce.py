@@ -144,6 +144,9 @@ buildModeRun = False
 def main():
     #setup
     pygame.init()
+    pygame.font.init()
+    defFont = pygame.font.SysFont('Courier New', 15)
+    defSurf = defFont.render('Build Mode (B to Exit)', False, WHITE)
     window = pygame.display.set_mode((WIDTH,HEIGHT))
     clock = pygame.time.Clock()
     run = True
@@ -171,6 +174,7 @@ def main():
 
         if buildModeRun:
             buildMode(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+            window.blit(defSurf, (WIDTH-200, 10))
             if pygame.key.get_pressed()[pygame.K_b]:
                 buildModeRun = False
                 pygame.time.delay(200)
