@@ -152,7 +152,6 @@ def main():
     run = True
     buildModeRun = False
     
-
     while run: #main pygame loop
         pygame.event.get() #needed so windows doesn't think game is frozen
         clock.tick(144)
