@@ -96,6 +96,7 @@ def buildMode(posX, posY):
                 if pygame.mouse.get_pressed(num_buttons=3)[2]:
                     selectedParticles.append(particles[i])
                     particles.remove(particles[i])
+                    pygame.time.delay(100)
                     if len(selectedParticles) > 1:
                         sticks.append(Stick(selectedParticles[0], selectedParticles[1], findDistance(selectedParticles[0], selectedParticles[1])))
                         particles.append(selectedParticles[0])
@@ -162,19 +163,19 @@ def main():
         for i in range(len(selectedParticles)): #draws active particles
             pygame.draw.circle(window, BLUE, (selectedParticles[i].x, selectedParticles[i].y), RADIUS) 
 
-
         pygame.display.update()
         window.fill((0,0,0)) #fill background black
+        
         if buildModeRun:
             buildMode(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
             if pygame.key.get_pressed()[pygame.K_b]:
                 buildModeRun = False
-                pygame.time.delay(100)
+                pygame.time.delay(200)
         else:
             verletUpdate(clock) #pass clock to verlet physics
             if pygame.key.get_pressed()[pygame.K_b]:
                 buildModeRun = True
-                pygame.time.delay(100)
+                pygame.time.delay(200)
 
         checkMouse(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) #send mouse position to be checked
         if pygame.key.get_pressed()[pygame.K_ESCAPE]: #if user hits ESCAPE, close the game
